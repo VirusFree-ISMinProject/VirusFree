@@ -388,6 +388,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(890, 500)
+
         MainWindow.setMinimumSize(QtCore.QSize(890, 500))
         MainWindow.setMaximumSize(QtCore.QSize(890, 500))
         if sys.platform == "win32":
@@ -400,14 +401,14 @@ class Ui_MainWindow(object):
         MainWindow.setStyleSheet("")
         self.SideBar = QtWidgets.QLabel(MainWindow)
         self.SideBar.setGeometry(QtCore.QRect(-10, 40, 61, 571))
-        self.SideBar.setStyleSheet("background-color: rgb(81, 89, 97);")
+        self.SideBar.setStyleSheet("background-color: #000C66;")
         self.SideBar.setText("")
         self.SideBar.setObjectName("SideBar")
 
         self.HomeTabButton = QtWidgets.QPushButton(MainWindow)
         self.HomeTabButton.setGeometry(QtCore.QRect(0, 50, 51, 31))
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(50)
         self.HomeTabButton.setFont(font)
         self.HomeTabButton.setStyleSheet("background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.1468, fy:0.1468, stop:1 rgba(0, 0, 0, 0));\n"
 "image: url(:/res/SideBar/home.svg);\n"
@@ -419,7 +420,7 @@ class Ui_MainWindow(object):
         self.SettingsTabButton = QtWidgets.QPushButton(MainWindow)
         self.SettingsTabButton.setGeometry(QtCore.QRect(0, 90, 51, 31))
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(50)
         self.SettingsTabButton.setFont(font)
         self.SettingsTabButton.setStyleSheet("background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.1468, fy:0.1468, stop:1 rgba(0, 0, 0, 0));\n"
 "image: url(:/res/SideBar/settings.svg);")
@@ -440,10 +441,11 @@ class Ui_MainWindow(object):
         self.HomeTitle = QtWidgets.QLabel(self.HomeTab)
         self.HomeTitle.setGeometry(QtCore.QRect(0, 0, 851, 41))
         font = QtGui.QFont()
-        font.setPointSize(23)
+        font.setPointSize(30)
         self.HomeTitle.setFont(font)
         self.HomeTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.HomeTitle.setObjectName("HomeTitle")
+
         self.SelectFileButton = QtWidgets.QPushButton(self.HomeTab)
         self.SelectFileButton.setGeometry(QtCore.QRect(300, 145, 221, 31))
         font = QtGui.QFont()
@@ -451,6 +453,7 @@ class Ui_MainWindow(object):
         self.SelectFileButton.setFont(font)
         self.SelectFileButton.setFlat(False)
         self.SelectFileButton.setObjectName("SelectFileButton")
+
         self.ReportIssueButton = QtWidgets.QPushButton(self.HomeTab)
         self.ReportIssueButton.setGeometry(QtCore.QRect(300, 185, 221, 31))
         font = QtGui.QFont()
@@ -464,7 +467,7 @@ class Ui_MainWindow(object):
         self.SettingsTitle = QtWidgets.QLabel(self.SettingsTab)
         self.SettingsTitle.setGeometry(QtCore.QRect(0, 0, 851, 41))
         font = QtGui.QFont()
-        font.setPointSize(23)
+        font.setPointSize(30)
         self.SettingsTitle.setFont(font)
         self.SettingsTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.SettingsTitle.setObjectName("SettingsTitle")
@@ -522,32 +525,32 @@ class Ui_MainWindow(object):
         self.VirusScanResults_hidden = QtWidgets.QWidget()
         self.VirusScanResults_hidden.setObjectName("VirusScanResults_hidden")
         self.VirusResultsTitle = QtWidgets.QLabel(self.VirusScanResults_hidden)
-        self.VirusResultsTitle.setGeometry(QtCore.QRect(0, 0, 551, 41))
+        self.VirusResultsTitle.setGeometry(QtCore.QRect(0, 0, 851, 41))
         font = QtGui.QFont()
-        font.setPointSize(23)
+        font.setPointSize(30)
         self.VirusResultsTitle.setFont(font)
         self.VirusResultsTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.VirusResultsTitle.setObjectName("VirusResultsTitle")
         self.FileName = QtWidgets.QLabel(self.VirusScanResults_hidden)
         self.FileName.setGeometry(QtCore.QRect(5, 45, 541, 31))
         font = QtGui.QFont()
-        font.setPointSize(9)
+        font.setPointSize(20)
         self.FileName.setFont(font)
         self.FileName.setObjectName("FileName")
         self.FilePath = QtWidgets.QLabel(self.VirusScanResults_hidden)
         self.FilePath.setGeometry(QtCore.QRect(5, 75, 541, 31))
         font = QtGui.QFont()
-        font.setPointSize(9)
+        font.setPointSize(20)
         self.FilePath.setFont(font)
         self.FilePath.setObjectName("FilePath")
         self.FileHash = QtWidgets.QLabel(self.VirusScanResults_hidden)
         self.FileHash.setGeometry(QtCore.QRect(5, 110, 541, 31))
         font = QtGui.QFont()
-        font.setPointSize(9)
+        font.setPointSize(20)
         self.FileHash.setFont(font)
         self.FileHash.setObjectName("FileHash")
         self.label = QtWidgets.QLabel(self.VirusScanResults_hidden)
-        self.label.setGeometry(QtCore.QRect(5, 160, 111, 31))
+        self.label.setGeometry(QtCore.QRect(5, 160, 841, 31))
         font = QtGui.QFont()
         font.setPointSize(9)
         self.label.setFont(font)
@@ -557,13 +560,13 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(18)
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(100)
         self.IsFileVirusY_N.setFont(font)
         self.IsFileVirusY_N.setStyleSheet("color: rgb(255, 0, 0);")
         self.IsFileVirusY_N.setAlignment(QtCore.Qt.AlignCenter)
         self.IsFileVirusY_N.setObjectName("IsFileVirusY_N")
         self.ReturnToHomeTabButton = QtWidgets.QPushButton(self.VirusScanResults_hidden)
-        self.ReturnToHomeTabButton.setGeometry(QtCore.QRect(5, 265, 91, 31))
+        self.ReturnToHomeTabButton.setGeometry(QtCore.QRect(180, 400, 121, 31))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.ReturnToHomeTabButton.setFont(font)
@@ -571,7 +574,7 @@ class Ui_MainWindow(object):
         self.ReturnToHomeTabButton.setFlat(False)
         self.ReturnToHomeTabButton.setObjectName("ReturnToHomeTabButton")
         self.DeleteFileButton = QtWidgets.QPushButton(self.VirusScanResults_hidden)
-        self.DeleteFileButton.setGeometry(QtCore.QRect(100, 265, 111, 31))
+        self.DeleteFileButton.setGeometry(QtCore.QRect(515, 400, 121, 31))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.DeleteFileButton.setFont(font)
@@ -646,14 +649,14 @@ class Ui_MainWindow(object):
         self.LoadingPage = QtWidgets.QWidget()
         self.LoadingPage.setObjectName("LoadingPage")
         self.LoadingPageTitle = QtWidgets.QLabel(self.LoadingPage)
-        self.LoadingPageTitle.setGeometry(QtCore.QRect(-10, 0, 561, 41))
+        self.LoadingPageTitle.setGeometry(QtCore.QRect(-10, 0, 861, 41))
         font = QtGui.QFont()
         font.setPointSize(23)
         self.LoadingPageTitle.setFont(font)
         self.LoadingPageTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.LoadingPageTitle.setObjectName("LoadingPageTitle")
         self.label_7 = QtWidgets.QLabel(self.LoadingPage)
-        self.label_7.setGeometry(QtCore.QRect(0, 0, 541, 301))
+        self.label_7.setGeometry(QtCore.QRect(0, 0, 841, 301))
         font = QtGui.QFont()
         font.setPointSize(60)
         font.setBold(True)
@@ -728,24 +731,24 @@ class Ui_MainWindow(object):
                     apply_stylesheet(object, theme=f'{current_dir}\\res\\themes\\dark_red.xml', extra=extra)
                 else:
                     apply_stylesheet(object, theme=f'{current_dir}/res/themes/dark_red.xml', extra=extra)
-                self.SideBar.setStyleSheet("background-color: rgb(81, 89, 97);")
-                self.SideBar_2.setStyleSheet("background-color: rgb(81, 89, 97);")
-                self.HomeTitle.setStyleSheet("background-color: rgb(81, 89, 97);")
-                self.SettingsTitle.setStyleSheet("background-color: rgb(81, 89, 97);")
-                self.VirusResultsTitle.setStyleSheet("background-color: rgb(81, 89, 97);")
-                self.LoadingPageTitle.setStyleSheet("background-color: rgb(81, 89, 97);")
+                self.SideBar.setStyleSheet("background-color: #000C66;")
+                self.SideBar_2.setStyleSheet("background-color: #000C66;")
+                self.HomeTitle.setStyleSheet("background-color: #000C66;")
+                self.SettingsTitle.setStyleSheet("background-color: #000C66;")
+                self.VirusResultsTitle.setStyleSheet("background-color: #000C66;")
+                self.LoadingPageTitle.setStyleSheet("background-color: #000C66;")
                 self.LightModeButton.setText("Light Mode")
             if style == "Light":
                 if sys.platform.startswith('win'):
                     apply_stylesheet(object, theme=f'{current_dir}\\res\\themes\\light_pink.xml', extra=extra)
                 else:
                     apply_stylesheet(object, theme=f'{current_dir}/res/themes/light_pink.xml', extra=extra)
-                self.SideBar.setStyleSheet("background-color: rgb(182, 182, 182);")
-                self.SideBar_2.setStyleSheet("background-color: rgb(182, 182, 182);")
-                self.HomeTitle.setStyleSheet("background-color: rgb(182, 182, 182);")
-                self.SettingsTitle.setStyleSheet("background-color: rgb(182, 182, 182);")
-                self.VirusResultsTitle.setStyleSheet("background-color: rgb(182, 182, 182);")
-                self.LoadingPageTitle.setStyleSheet("background-color: rgb(182, 182, 182);")
+                self.SideBar.setStyleSheet("background-color: #000C66;")
+                self.SideBar_2.setStyleSheet("background-color: #000C66;")
+                self.HomeTitle.setStyleSheet("background-color: #000C66;")
+                self.SettingsTitle.setStyleSheet("background-color: #000C66;")
+                self.VirusResultsTitle.setStyleSheet("background-color: #000C66;")
+                self.LoadingPageTitle.setStyleSheet("background-color: #000C66;")
                 self.LightModeButton.setText("Dark Mode")
 
 
@@ -757,16 +760,16 @@ class Ui_MainWindow(object):
                         apply_stylesheet(object, theme=f'{current_dir}\\res\\themes\\light_pink.xml', extra=extra)
                     else:
                         apply_stylesheet(object, theme=f'{current_dir}/res/themes/light_pink.xml', extra=extra)
-                    self.CurrentTabHome.setStyleSheet("background-color: rgb(182, 182, 182);")
+                    self.CurrentTabHome.setStyleSheet("background-color: #000C66;")
                     self.CurrentTabSettings.setStyleSheet("background-color: rgb(255, 0, 0);")
-                    self.SideBar.setStyleSheet("background-color: rgb(182, 182, 182);")
-                    self.SideBar_2.setStyleSheet("background-color: rgb(182, 182, 182);")
-                    self.CurrentTabHome.setStyleSheet("background-color: rgb(182, 182, 182);")
+                    self.SideBar.setStyleSheet("background-color: #000C66;")
+                    self.SideBar_2.setStyleSheet("background-color: #000C66;")
+                    self.CurrentTabHome.setStyleSheet("background-color: #000C66;")
                     self.CurrentTabSettings.setStyleSheet("background-color: rgb(231, 84, 128);")
                     # set title backgrounds
-                    self.HomeTitle.setStyleSheet("background-color: rgb(182, 182, 182);")
-                    self.SettingsTitle.setStyleSheet("background-color: rgb(182, 182, 182);")
-                    self.VirusResultsTitle.setStyleSheet("background-color: rgb(182, 182, 182);")
+                    self.HomeTitle.setStyleSheet("background-color: #000C66;")
+                    self.SettingsTitle.setStyleSheet("background-color: #000C66;")
+                    self.VirusResultsTitle.setStyleSheet("background-color: #000C66;")
                     self.LoadingPageTitle.setStyleSheet("background-color: rgb(182, 182, 182);")
                 self.LightModeButton.setText("Dark Mode")
             else:
@@ -810,8 +813,8 @@ class Ui_MainWindow(object):
                 self.CurrentTabHome.setStyleSheet("background-color: rgb(255, 0, 0);")
             else:
                 # light mode
-                self.CurrentTabSettings.setStyleSheet("background-color: rgb(182, 182, 182);")
-                self.CurrentTabHome.setStyleSheet("background-color: rgb(231, 84, 128);")
+                self.CurrentTabSettings.setStyleSheet("background-color: #000C66;")
+                self.CurrentTabHome.setStyleSheet("background-color: #0A2A7A;")
                 
 
 
@@ -826,8 +829,8 @@ class Ui_MainWindow(object):
                 self.CurrentTabHome.setStyleSheet("background-color: rgb(81, 89, 97);")
             else:
                 # light mode
-                self.CurrentTabSettings.setStyleSheet("background-color: rgb(231, 84, 128);")
-                self.CurrentTabHome.setStyleSheet("background-color: rgb(182, 182, 182);")
+                self.CurrentTabSettings.setStyleSheet("background-color: #0A2A7A;")
+                self.CurrentTabHome.setStyleSheet("background-color: #000C66;")
                 
             return	
 
@@ -852,7 +855,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", f"-AntiVirus- [v{VERSION}] [dev; {DEV}]"))
+        MainWindow.setWindowTitle(_translate("MainWindow", f"-AntiVirus- {DEV}"))
         self.HomeTitle.setText(_translate("MainWindow", "Home"))
         self.SelectFileButton.setText(_translate("MainWindow", "Scan File"))
         self.ReportIssueButton.setText(_translate("MainWindow", "report issue"))
@@ -878,7 +881,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Detections"))
         self.LoadingPageTitle.setText(_translate("MainWindow", "..."))
         self.label_7.setText(_translate("MainWindow", "loading..."))
-        self.version_display.setText(_translate("MainWindow", f"v{VERSION}"))
+        self.version_display.setText(_translate("MainWindow", f""))
 # import resources
 import res.res_rc
 
