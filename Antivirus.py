@@ -216,7 +216,7 @@ Please enter a valid Virus Total API key.
                         self.DetectionsText.setText(f"{str(detections)}")
                         if virus_found == True:
                             self.IsFileVirusY_N.setFont(QtGui.QFont("Arial", 10))
-                            self.IsFileVirusY_N.setText("Probably a virus!")
+                            self.IsFileVirusY_N.setText("Yes")
                         else:
                             displayResults_VIRUS(self, file)
                     else:
@@ -225,7 +225,7 @@ Please enter a valid Virus Total API key.
                         if virus_found == False:
                             self.IsFileVirusY_N.setStyleSheet("color: green")
                             self.IsFileVirusY_N.setFont(QtGui.QFont("Arial", 12))
-                            self.IsFileVirusY_N.setText("Probably clean")
+                            self.IsFileVirusY_N.setText("No")
                         else:
                             displayResults_VIRUS(self, file)
             else:
