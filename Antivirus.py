@@ -31,7 +31,7 @@ VERSION = "2.5"
 DEV     = "Information Security"
 
 # url´s
-Report_issues = "https://github.com/Shradha-2491/Python-Antivirus/issues/new"
+Report_issues = "https://github.com/VirusFree-ISMinProject/VirusFree/issues/new"
 Submit_sample = "https://github.com/Shradha-2491/Python-Antivirus/discussions/new"
 virus_total_api = "https://www.virustotal.com/api/v3/files/report"
 
