@@ -34,22 +34,17 @@ DEV     = "Information Security"
 Report_issues = "https://github.com/Shradha-2491/Python-Antivirus/issues/new"
 Submit_sample = "https://github.com/Shradha-2491/Python-Antivirus/discussions/new"
 virus_total_api = "https://www.virustotal.com/api/v3/files/report"
-meta_defender_api = "https://api.metadefender.com/v4/hash/" # + hash
 
 # save settings to settings/settings.ini
 def SaveSettings(self):
     # get api keys
     api_key = self.VirusTotalApiKey.text()
-    MetaDefenderApiKey = self.MetaDefenderApiKey.text()
     # get VirusTotal scan checkbox status and meta defender scan checkbox status
     virus_total_scan = self.UseVirusTotalApiCheckBox.isChecked()
-    meta_defender_scan = self.UseMetaDefenderApiCheckBox.isChecked()
     self.VirusTotalApiKey.setText(api_key)
 
     config['-settings-']['VirusTotalScan'] = str(virus_total_scan)
     config['-settings-']['VirusTotalApiKey'] = str(api_key)
-    config["-settings-"]["MetaDefenderScan"] = str(meta_defender_scan)
-    config["-settings-"]["MetaDefenderApiKey"] = str(MetaDefenderApiKey)
     if self.LightModeButton.text() == "Light Mode":
         config["-settings-"]["Style"] = "Dark"
     else:
@@ -104,12 +99,6 @@ def displayResults_VIRUS(self, file):
     else:
         # hide Virus total results since it is not needed
         self.VirusTotalWidget.hide()
-    # check if meta defender check if on and file is under 120mb
-    if self.UseMetaDefenderApiCheckBox.isChecked() and os.path.getsize(file) < 120000000:
-        self.MetaDefenderWidget.show()
-    else:
-        # hide meta defender results since it is not needed
-        self.MetaDefenderWidget.hide()
         self.IsFileVirusY_N.setStyleSheet("color: red")
         self.IsFileVirusY_N.setText("YES!")
     # delete file button
@@ -126,12 +115,6 @@ def displayResults_CLEAN(self, file):
     else:
         # hide Virus total results since it is not needed
         self.VirusTotalWidget.hide()
-    # check if meta defender check if on and file is under 120mb
-    if self.UseMetaDefenderApiCheckBox.isChecked() and os.path.getsize(file) < 120000000:
-        self.MetaDefenderWidget.show()
-    else:
-        # hide meta defender results since it is not needed
-        self.MetaDefenderWidget.hide()
         # set text to clean
         self.IsFileVirusY_N.setStyleSheet("color: green")
         self.IsFileVirusY_N.setText("NO!")
@@ -231,7 +214,7 @@ Please enter a valid Virus Total API key.
                     if detections > not_detections:
                         self.DetectionsText.setStyleSheet("color: red")
                         self.DetectionsText.setText(f"{str(detections)}")
-                        if virus_found == False:
+                        if virus_found == True:
                             self.IsFileVirusY_N.setFont(QtGui.QFont("Arial", 10))
                             self.IsFileVirusY_N.setText("Probably a virus!")
                         else:
@@ -255,73 +238,6 @@ Please enter a valid Virus Total API key.
             msgBox.setText("Error")
             msgBox.setInformativeText(f"""\
 Cant scan file with Virus Total.
-            """)
-            # remove window title bar
-            msgBox.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-            msgBox.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-            msgBox.exec_()
-
-        try:
-            # Meta Defender hash check
-            if self.UseMetaDefenderApiCheckBox.isChecked():
-                # get api key
-                MetaDefenderApiKey = self.MetaDefenderApiKey.text()
-                # check if api key is empty if yes then show error
-                if MetaDefenderApiKey == "":
-                    msgBox = QtWidgets.QMessageBox()
-                    msgBox.setIcon(QtWidgets.QMessageBox.Critical)
-                    msgBox.setText("Error")
-                    msgBox.setInformativeText(f"""\
-Please enter a valid Meta Defender API key.
-                    """)
-                    # remove window title bar
-                    msgBox.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-                    msgBox.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-                    msgBox.exec_()
-                # if api key is not empty then scan the hash of the file
-                else:
-                    M_header=({"apikey": MetaDefenderApiKey})
-                    M_analysis = requests.get(meta_defender_api + readable_hash, headers=M_header)
-                    M_analysis_json = M_analysis.json()
-                    M_detections = M_analysis_json["scan_results"]["total_detected_avs"]
-                    M_not_detections = M_analysis_json["scan_results"]["total_avs"]
-                    half_M_not_detections = M_not_detections / 2
-                    # show Meta Defender results
-                    self.MetaDefenderWidget.show()
-                    # if detections more than half of not detections print red
-                    if M_detections > half_M_not_detections:
-                        self.MetaDefenderDetectionsText.setStyleSheet("color: red")
-                        self.MetaDefenderDetectionsText.setText(f"{str(M_detections)} | {str(M_not_detections)}")
-                        self.IsFileVirusY_N.setStyleSheet("color: red")
-                        if virus_found == False:
-                            self.IsFileVirusY_N.setFont(QtGui.QFont("Arial", 10))
-                            self.IsFileVirusY_N.setText("Probably a virus!")
-                        else:
-                            displayResults_VIRUS(self, file)
-                    else:
-                        self.MetaDefenderDetectionsText.setStyleSheet("color: green")
-                        self.MetaDefenderDetectionsText.setText(f"{str(M_detections)} | {str(M_not_detections)}")
-                        if virus_found == False:
-                            self.IsFileVirusY_N.setStyleSheet("color: green")
-                            self.IsFileVirusY_N.setFont(QtGui.QFont("Arial", 12))
-                            self.IsFileVirusY_N.setText("Probably clean")
-                        else:
-                            displayResults_VIRUS(self, file)
-
-            else:
-                # goto hidden results tab
-                self.Tabs.setCurrentIndex(2)
-                if virus_found == True:
-                    displayResults_VIRUS(self, file)
-                else:
-                    displayResults_CLEAN(self, file)
-        # show error when Meta Defender api was not able to scan the file
-        except:
-            msgBox = QtWidgets.QMessageBox()
-            msgBox.setIcon(QtWidgets.QMessageBox.Critical)
-            msgBox.setText("Error")
-            msgBox.setInformativeText(f"""\
-Cant scan file with Meta Defender.
             """)
             # remove window title bar
             msgBox.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
@@ -401,7 +317,7 @@ class Ui_MainWindow(object):
         MainWindow.setStyleSheet("")
         self.SideBar = QtWidgets.QLabel(MainWindow)
         self.SideBar.setGeometry(QtCore.QRect(-10, 40, 61, 571))
-        self.SideBar.setStyleSheet("background-color: #000C66;")
+        self.SideBar.setStyleSheet("background-color: #5e17eb;")
         self.SideBar.setText("")
         self.SideBar.setObjectName("SideBar")
 
@@ -445,6 +361,11 @@ class Ui_MainWindow(object):
         self.HomeTitle.setFont(font)
         self.HomeTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.HomeTitle.setObjectName("HomeTitle")
+
+        self.LogoOfImage = QtWidgets.QLabel(MainWindow)
+        self.LogoOfImage.setGeometry(QtCore.QRect(344, 200, 221, 221))
+        self.LogoOfImage.setPixmap(QtGui.QPixmap("logo.png"))
+        self.LogoOfImage.setScaledContents(True)
 
         self.SelectFileButton = QtWidgets.QPushButton(self.HomeTab)
         self.SelectFileButton.setGeometry(QtCore.QRect(300, 145, 221, 31))
@@ -497,22 +418,6 @@ class Ui_MainWindow(object):
         self.SaveSettingsButton.setFont(font)
         self.SaveSettingsButton.setFlat(False)
         self.SaveSettingsButton.setObjectName("SaveSettingsButton")
-        self.UseMetaDefenderApiCheckBox = QtWidgets.QCheckBox(self.SettingsTab)
-        self.UseMetaDefenderApiCheckBox.setGeometry(QtCore.QRect(5, 90, 481, 17))
-        font = QtGui.QFont()
-        font.setPointSize(20)
-        self.UseMetaDefenderApiCheckBox.setFont(font)
-        self.UseMetaDefenderApiCheckBox.setObjectName("UseMetaDefenderApiCheckBox")
-        self.MetaDefenderApiKey = QtWidgets.QLineEdit(self.SettingsTab)
-        self.MetaDefenderApiKey.setGeometry(QtCore.QRect(5, 110, 791, 20))
-        self.MetaDefenderApiKey.setStyleSheet("")
-        self.MetaDefenderApiKey.setInputMask("")
-        self.MetaDefenderApiKey.setText("")
-        self.MetaDefenderApiKey.setMaxLength(32767)
-        self.MetaDefenderApiKey.setFrame(False)
-        self.MetaDefenderApiKey.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.MetaDefenderApiKey.setAlignment(QtCore.Qt.AlignCenter)
-        self.MetaDefenderApiKey.setObjectName("MetaDefenderApiKey")
 
         self.LightModeButton = QtWidgets.QPushButton(self.SettingsTab)
         self.LightModeButton.setGeometry(QtCore.QRect(180, 400, 121, 31))
@@ -616,35 +521,14 @@ class Ui_MainWindow(object):
         self.label_3.raise_()
         self.label_5.raise_()
         self.DetectionsText.raise_()
-        self.MetaDefenderWidget = QtWidgets.QWidget(self.VirusScanResults_hidden)
-        self.MetaDefenderWidget.setGeometry(QtCore.QRect(310, 160, 221, 71))
-        self.MetaDefenderWidget.setObjectName("MetaDefenderWidget")
-        self.label_4 = QtWidgets.QLabel(self.MetaDefenderWidget)
-        self.label_4.setGeometry(QtCore.QRect(10, 9, 201, 21))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.label_4.setFont(font)
-        self.label_4.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
-        self.label_4.setObjectName("label_4")
-        self.MetaDefenderDetectionsText = QtWidgets.QLabel(self.MetaDefenderWidget)
-        self.MetaDefenderDetectionsText.setGeometry(QtCore.QRect(10, 20, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        font.setBold(True)
-        font.setWeight(75)
-        self.MetaDefenderDetectionsText.setFont(font)
-        self.MetaDefenderDetectionsText.setAlignment(QtCore.Qt.AlignCenter)
-        self.MetaDefenderDetectionsText.setObjectName("MetaDefenderDetectionsText")
-        self.label_6 = QtWidgets.QLabel(self.MetaDefenderWidget)
-        self.label_6.setGeometry(QtCore.QRect(10, 47, 201, 21))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.label_6.setFont(font)
-        self.label_6.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
-        self.label_6.setObjectName("label_6")
-        self.label_4.raise_()
-        self.label_6.raise_()
-        self.MetaDefenderDetectionsText.raise_()
+        # self.label_6 = QtWidgets.QLabel(self.MetaDefenderWidget)
+        # self.label_6.setGeometry(QtCore.QRect(10, 47, 201, 21))
+        # font = QtGui.QFont()
+        # font.setPointSize(10)
+        # self.label_6.setFont(font)
+        # self.label_6.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        # self.label_6.setObjectName("label_6")
+        # self.label_6.raise_()
         self.Tabs.addWidget(self.VirusScanResults_hidden)
         self.LoadingPage = QtWidgets.QWidget()
         self.LoadingPage.setObjectName("LoadingPage")
@@ -691,8 +575,6 @@ class Ui_MainWindow(object):
         # read settings from ini file
         VirustotalScan = config.get('-settings-', 'VirusTotalScan')
         api_key = config.get('-settings-', 'VirusTotalApiKey')
-        MetaDefenderScan = config.get('-settings-', 'MetaDefenderScan')
-        MetaDefenderApiKey = config.get('-settings-', 'MetaDefenderApiKey')
         style = config.get('-settings-', 'Style')
 
 
@@ -713,11 +595,9 @@ class Ui_MainWindow(object):
             self.ReturnToHomeTabButton,
             self.DeleteFileButton,
             # line edits
-            self.MetaDefenderApiKey,
             self.VirusTotalApiKey,
             # check boxes
             self.UseVirusTotalApiCheckBox,
-            self.UseMetaDefenderApiCheckBox,
             # background
             MainWindow,
             # labels
@@ -731,24 +611,26 @@ class Ui_MainWindow(object):
                     apply_stylesheet(object, theme=f'{current_dir}\\res\\themes\\dark_red.xml', extra=extra)
                 else:
                     apply_stylesheet(object, theme=f'{current_dir}/res/themes/dark_red.xml', extra=extra)
-                self.SideBar.setStyleSheet("background-color: #000C66;")
-                self.SideBar_2.setStyleSheet("background-color: #000C66;")
-                self.HomeTitle.setStyleSheet("background-color: #000C66;")
-                self.SettingsTitle.setStyleSheet("background-color: #000C66;")
-                self.VirusResultsTitle.setStyleSheet("background-color: #000C66;")
-                self.LoadingPageTitle.setStyleSheet("background-color: #000C66;")
+                self.SideBar.setStyleSheet("background-color: #5e17eb;")
+                self.SideBar_2.setStyleSheet("background-color: #5e17eb;")
+                self.HomeTitle.setStyleSheet("background-color: #5e17eb;")
+                self.SettingsTitle.setStyleSheet("background-color: #5e17eb;")
+                self.VirusResultsTitle.setStyleSheet("background-color: #5e17eb;")
+                self.LoadingPageTitle.setStyleSheet("background-color: #5e17eb;")
+                self.LogoOfImage.setPixmap(QtGui.QPixmap("logo1.png"))
                 self.LightModeButton.setText("Light Mode")
             if style == "Light":
                 if sys.platform.startswith('win'):
                     apply_stylesheet(object, theme=f'{current_dir}\\res\\themes\\light_pink.xml', extra=extra)
                 else:
                     apply_stylesheet(object, theme=f'{current_dir}/res/themes/light_pink.xml', extra=extra)
-                self.SideBar.setStyleSheet("background-color: #000C66;")
-                self.SideBar_2.setStyleSheet("background-color: #000C66;")
-                self.HomeTitle.setStyleSheet("background-color: #000C66;")
-                self.SettingsTitle.setStyleSheet("background-color: #000C66;")
-                self.VirusResultsTitle.setStyleSheet("background-color: #000C66;")
-                self.LoadingPageTitle.setStyleSheet("background-color: #000C66;")
+                self.SideBar.setStyleSheet("background-color: #5e17eb;")
+                self.SideBar_2.setStyleSheet("background-color: #5e17eb;")
+                self.HomeTitle.setStyleSheet("background-color: #5e17eb;")
+                self.SettingsTitle.setStyleSheet("background-color: #5e17eb;")
+                self.VirusResultsTitle.setStyleSheet("background-color: #5e17eb;")
+                self.LoadingPageTitle.setStyleSheet("background-color: #5e17eb;")
+                self.LogoOfImage.setPixmap(QtGui.QPixmap("logo.png"))
                 self.LightModeButton.setText("Dark Mode")
 
 
@@ -760,17 +642,18 @@ class Ui_MainWindow(object):
                         apply_stylesheet(object, theme=f'{current_dir}\\res\\themes\\light_pink.xml', extra=extra)
                     else:
                         apply_stylesheet(object, theme=f'{current_dir}/res/themes/light_pink.xml', extra=extra)
-                    self.CurrentTabHome.setStyleSheet("background-color: #000C66;")
+                    self.CurrentTabHome.setStyleSheet("background-color: #5e17eb;")
                     self.CurrentTabSettings.setStyleSheet("background-color: rgb(255, 0, 0);")
-                    self.SideBar.setStyleSheet("background-color: #000C66;")
-                    self.SideBar_2.setStyleSheet("background-color: #000C66;")
-                    self.CurrentTabHome.setStyleSheet("background-color: #000C66;")
+                    self.SideBar.setStyleSheet("background-color: #5e17eb;")
+                    self.SideBar_2.setStyleSheet("background-color: #5e17eb;")
+                    self.CurrentTabHome.setStyleSheet("background-color: #5e17eb;")
                     self.CurrentTabSettings.setStyleSheet("background-color: rgb(231, 84, 128);")
+                    self.LogoOfImage.setPixmap(QtGui.QPixmap("logo.png"))
                     # set title backgrounds
-                    self.HomeTitle.setStyleSheet("background-color: #000C66;")
-                    self.SettingsTitle.setStyleSheet("background-color: #000C66;")
-                    self.VirusResultsTitle.setStyleSheet("background-color: #000C66;")
-                    self.LoadingPageTitle.setStyleSheet("background-color: rgb(182, 182, 182);")
+                    self.HomeTitle.setStyleSheet("background-color: #5e17eb;")
+                    self.SettingsTitle.setStyleSheet("background-color: #5e17eb;")
+                    self.VirusResultsTitle.setStyleSheet("background-color: #5e17eb;")
+                    self.LoadingPageTitle.setStyleSheet("background-color: #5e17eb;")
                 self.LightModeButton.setText("Dark Mode")
             else:
                 for object in objects:
@@ -783,6 +666,7 @@ class Ui_MainWindow(object):
                     self.SideBar.setStyleSheet("background-color: rgb(81, 89, 97);")
                     self.SideBar_2.setStyleSheet("background-color: rgb(81, 89, 97);")
                     self.CurrentTabHome.setStyleSheet("background-color: rgb(81, 89, 97);")
+                    self.LogoOfImage.setPixmap(QtGui.QPixmap("logo1.png"))
                     self.CurrentTabSettings.setStyleSheet("background-color: rgb(255, 0, 0);")
                     # set title backgrounds
                     self.HomeTitle.setStyleSheet("background-color: rgb(81, 89, 97);")
@@ -798,11 +682,6 @@ class Ui_MainWindow(object):
             self.UseVirusTotalApiCheckBox.setChecked(False)
         self.VirusTotalApiKey.setText(api_key)
 
-        if MetaDefenderScan == 'True':
-            self.UseMetaDefenderApiCheckBox.setChecked(True)
-        else:
-            self.UseMetaDefenderApiCheckBox.setChecked(False)
-        self.MetaDefenderApiKey.setText(MetaDefenderApiKey)
 
         def change_tab_settings(self):
             self.Tabs.setCurrentIndex(0)
@@ -813,7 +692,7 @@ class Ui_MainWindow(object):
                 self.CurrentTabHome.setStyleSheet("background-color: rgb(255, 0, 0);")
             else:
                 # light mode
-                self.CurrentTabSettings.setStyleSheet("background-color: #000C66;")
+                self.CurrentTabSettings.setStyleSheet("background-color: #5e17eb;")
                 self.CurrentTabHome.setStyleSheet("background-color: #0A2A7A;")
                 
 
@@ -830,7 +709,7 @@ class Ui_MainWindow(object):
             else:
                 # light mode
                 self.CurrentTabSettings.setStyleSheet("background-color: #0A2A7A;")
-                self.CurrentTabHome.setStyleSheet("background-color: #000C66;")
+                self.CurrentTabHome.setStyleSheet("background-color: #5e17eb;")
                 
             return	
 
@@ -855,7 +734,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", f"-AntiVirus- {DEV}"))
+        MainWindow.setWindowTitle(_translate("MainWindow", f"VirusFree {DEV}"))
         self.HomeTitle.setText(_translate("MainWindow", "Home"))
         self.SelectFileButton.setText(_translate("MainWindow", "Scan File"))
         self.ReportIssueButton.setText(_translate("MainWindow", "report issue"))
@@ -863,8 +742,6 @@ class Ui_MainWindow(object):
         self.UseVirusTotalApiCheckBox.setText(_translate("MainWindow", "Use Virus Total api (only files under 32MB) (files will be uploaded publicly)"))
         self.VirusTotalApiKey.setPlaceholderText(_translate("MainWindow", "Enter your Virus Total api Key here"))
         self.SaveSettingsButton.setText(_translate("MainWindow", "Save Config"))
-        self.UseMetaDefenderApiCheckBox.setText(_translate("MainWindow", "Use Meta Defender api to check hash"))
-        self.MetaDefenderApiKey.setPlaceholderText(_translate("MainWindow", "Enter your Meta Defender api Key here"))
         self.VirusResultsTitle.setText(_translate("MainWindow", "Virus Scan Results"))
         self.FileName.setText(_translate("MainWindow", "File Name: "))
         self.FilePath.setText(_translate("MainWindow", "File Path: "))
@@ -876,9 +753,7 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "Virus Total score"))
         self.DetectionsText.setText(_translate("MainWindow", "0 | 0"))
         self.label_5.setText(_translate("MainWindow", "Detections"))
-        self.label_4.setText(_translate("MainWindow", "Meta Defender score"))
-        self.MetaDefenderDetectionsText.setText(_translate("MainWindow", "0 | 0"))
-        self.label_6.setText(_translate("MainWindow", "Detections"))
+        # self.label_6.setText(_translate("MainWindow", "Detections"))
         self.LoadingPageTitle.setText(_translate("MainWindow", "..."))
         self.label_7.setText(_translate("MainWindow", "loading..."))
         self.version_display.setText(_translate("MainWindow", f""))
