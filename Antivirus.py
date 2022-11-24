@@ -93,6 +93,9 @@ File: {file}"
 # display results
 def displayResults_VIRUS(self, file):
     self.Tabs.setCurrentIndex(2)
+    font = QtGui.QFont()
+    font.setBold(True)
+    font.setWeight(75)
     # check if virus total check if on and file is under 32mb
     if self.UseVirusTotalApiCheckBox.isChecked() and os.path.getsize(file) < 32000000:
         self.VirusTotalWidget.show()
@@ -100,7 +103,8 @@ def displayResults_VIRUS(self, file):
         # hide Virus total results since it is not needed
         self.VirusTotalWidget.hide()
         self.IsFileVirusY_N.setStyleSheet("color: red")
-        self.IsFileVirusY_N.setText("YES!")
+        self.IsFileVirusY_N.setText("Oops Virus Attack!!!")
+        self.IsFileVirusY_N.setFont(font)
     # delete file button
     self.DeleteFileButton.clicked.connect(lambda: removeFile(file))
     # return button
@@ -109,6 +113,9 @@ def displayResults_VIRUS(self, file):
 
 def displayResults_CLEAN(self, file):
     self.Tabs.setCurrentIndex(2)
+    font = QtGui.QFont()
+    font.setBold(True)
+    font.setWeight(75)
     # check if virus total check if on and file is under 32mb
     if self.UseVirusTotalApiCheckBox.isChecked() and os.path.getsize(file) < 32000000:
         self.VirusTotalWidget.show()
@@ -117,7 +124,8 @@ def displayResults_CLEAN(self, file):
         self.VirusTotalWidget.hide()
         # set text to clean
         self.IsFileVirusY_N.setStyleSheet("color: green")
-        self.IsFileVirusY_N.setText("NO!")
+        self.IsFileVirusY_N.setText("You Are Virus Free :)")
+        self.IsFileVirusY_N.setFont(font)
     # delete file button
     self.DeleteFileButton.clicked.connect(lambda: removeFile(file))
     # return button
@@ -210,13 +218,17 @@ Please enter a valid Virus Total API key.
                     not_detections = analysis_json["data"]["attributes"]["stats"]["undetected"]
                     # show Virus total results
                     self.VirusTotalWidget.show()
+                    font = QtGui.QFont()
+                    font.setBold(True)
+                    font.setWeight(75)
                     # if detections more than half of not detections print red
                     if detections > not_detections:
                         self.DetectionsText.setStyleSheet("color: red")
                         self.DetectionsText.setText(f"{str(detections)}")
                         if virus_found == True:
                             self.IsFileVirusY_N.setFont(QtGui.QFont("Arial", 10))
-                            self.IsFileVirusY_N.setText("Yes")
+                            self.IsFileVirusY_N.setText("Oops Virus Attack!!!")
+                            self.IsFileVirusY_N.setFont(font)
                         else:
                             displayResults_VIRUS(self, file)
                     else:
@@ -225,7 +237,8 @@ Please enter a valid Virus Total API key.
                         if virus_found == False:
                             self.IsFileVirusY_N.setStyleSheet("color: green")
                             self.IsFileVirusY_N.setFont(QtGui.QFont("Arial", 12))
-                            self.IsFileVirusY_N.setText("No")
+                            self.IsFileVirusY_N.setText("You Are Virus Free :)")
+                            self.IsFileVirusY_N.setFont(font)
                         else:
                             displayResults_VIRUS(self, file)
             else:
@@ -711,7 +724,7 @@ class Ui_MainWindow(object):
                 self.CurrentTabSettings.setStyleSheet("background-color: #0A2A7A;")
                 self.CurrentTabHome.setStyleSheet("background-color: #5e17eb;")
                 
-            return	
+            return  
 
 
         # change tabs buttons
@@ -736,9 +749,14 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", f"VirusFree- {DEV}"))
         self.HomeTitle.setText(_translate("MainWindow", "Home"))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(100)
+        self.HomeTitle.setFont(font)
         self.SelectFileButton.setText(_translate("MainWindow", "Scan File"))
         self.ReportIssueButton.setText(_translate("MainWindow", "report issue"))
         self.SettingsTitle.setText(_translate("MainWindow", "Settings"))
+        self.SettingsTitle.setFont(font)
         self.UseVirusTotalApiCheckBox.setText(_translate("MainWindow", "Use Virus Total api (only files under 32MB) (files will be uploaded publicly)"))
         self.VirusTotalApiKey.setPlaceholderText(_translate("MainWindow", "Enter your Virus Total api Key here"))
         self.SaveSettingsButton.setText(_translate("MainWindow", "Save Config"))
